@@ -199,6 +199,7 @@ public class ShibcasAuthServlet extends HttpServlet {
         casToShibTranslatorNames = environment.getProperty("shibcas.casToShibTranslators");
         logger.debug("shibcas.casToShibTranslators: {}", casToShibTranslatorNames);
         casToShibTranslatorNames = null == casToShibTranslatorNames ? "" : casToShibTranslatorNames;
+
     }
 
     protected void startLoginRequest(final HttpServletRequest request, final HttpServletResponse response, Boolean force, Boolean passive) {
@@ -214,10 +215,14 @@ public class ShibcasAuthServlet extends HttpServlet {
                 serviceUrl += "&gatewayAttempted=true";
             }
 
+            // Include the extra parameters as part of the CAS service parameter
+            serviceUrl = serviceUrl + "&entityId=" + request.getAttribute(ExternalAuthentication.RELYING_PARTY_PARAM).toString();
+
             String loginUrl = constructRedirectUrl(serviceUrl, force, passive)
                     + getAdditionalParameters(request);
 
             logger.debug("loginUrl: {}", loginUrl);
+
             response.sendRedirect(loginUrl);
 
         } catch (final IOException e) {
