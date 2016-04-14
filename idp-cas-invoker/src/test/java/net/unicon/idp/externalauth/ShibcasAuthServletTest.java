@@ -28,6 +28,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.lang.StringBuffer;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ExternalAuthentication.class, Cas20ServiceTicketValidator.class})
 public class ShibcasAuthServletTest {
@@ -104,7 +106,7 @@ public class ShibcasAuthServletTest {
         Assertion assertion = createMockAssertion();
 
         Cas20ServiceTicketValidator ticketValidator = PowerMockito.mock(Cas20ServiceTicketValidator.class);
-        PowerMockito.when(ticketValidator.validate(TICKET, URL_WITH_CONVERSATION)).thenReturn(assertion);
+        PowerMockito.when(ticketValidator.validate(TICKET, URL_WITH_CONVERSATION_GATEWAY_ATTEMPTED)).thenReturn(assertion);
 
         PowerMockito.mockStatic(ExternalAuthentication.class);
         BDDMockito.given(ExternalAuthentication.startExternalAuthentication(request)).willReturn(E1S1);
@@ -188,7 +190,7 @@ public class ShibcasAuthServletTest {
         Assertion assertion = createMockAssertion();
 
         Cas20ServiceTicketValidator ticketValidator = PowerMockito.mock(Cas20ServiceTicketValidator.class);
-        PowerMockito.when(ticketValidator.validate(TICKET, URL_WITH_CONVERSATION)).thenReturn(assertion);
+        PowerMockito.when(ticketValidator.validate(TICKET, URL_WITH_CONVERSATION_GATEWAY_ATTEMPTED)).thenReturn(assertion);
 
         PowerMockito.mockStatic(ExternalAuthentication.class);
         BDDMockito.given(ExternalAuthentication.startExternalAuthentication(request)).willReturn(E1S1);
@@ -316,6 +318,7 @@ public class ShibcasAuthServletTest {
         BDDMockito.given(request.getMethod()).willReturn("GET");
         BDDMockito.given(request.isSecure()).willReturn(true);
         BDDMockito.given(request.getHeader("Host")).willReturn("shibserver.example.edu");
+        BDDMockito.given(request.getRequestURL()).willReturn(new StringBuffer("https://shibserver.example.edu/idp/Authn/ExtCas?conversation=e1s1"));
         //BDDMockito.given(request.getHeader("X-Forwarded-Host")).willReturn();
         BDDMockito.given(request.getServerPort()).willReturn(443);
         BDDMockito.given(request.getRequestURI()).willReturn("/idp/Authn/ExtCas");
