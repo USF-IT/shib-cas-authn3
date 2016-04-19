@@ -5,7 +5,7 @@ allprojects {
     apply plugin: 'java'
     group = 'net.unicon'
 
-    sourceCompatibility = 1.7
+    sourceCompatibility = 1.8
     version = project.version
 
     repositories {
@@ -16,9 +16,9 @@ allprojects {
 
     dependencies {
         testCompile group: 'junit', name: 'junit', version: project.junitVersion
-    }    
-    
-    sourceSets.test.runtimeClasspath += files("idp-cas-invoker/src/test/resources") 
+    }
+
+    sourceSets.test.runtimeClasspath += files("idp-cas-invoker/src/test/resources")
 }
 
 task wrapper(type: Wrapper) {
